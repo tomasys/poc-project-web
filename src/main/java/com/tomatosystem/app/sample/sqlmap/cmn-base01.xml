@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cmn-base01">
+	
+    <!--
+		설명           :  업로드된 파일의 상태를 커밋상태로 변경한다.
+		파라미터     : 
+		주사용처	:
+		변경이력    : 
+	-->
+    <update id="commitCmnFile" parameterType="HashMap">
+    <![CDATA[
+    UPDATE CMN_ATTC_FILE
+       SET FILE_STAT_RCD = 'CMN101.SAVE'
+    WHERE ATTC_FILE_NO = #{ATTC_FILE_NO}
+   ]]>
+   </update> 
+   
+   <insert id="insertCmnFile" parameterType="HashMap">
+	<![CDATA[
+	INSERT INTO CMN_ATTC_FILE(
+			]]>
+	      ATTC_FILE_NO
+	     , SEQ
+	     , PGM_ID
+	     , USER_ID
+	     , FILE_NM
+	     , SAVE_FILE_NM
+	     , FILE_PATH
+	     , FILE_EXT
+	     , FILE_SIZE
+	     , FILE_STAT_RCD
+	     , CRT_DTHR 
+	     , CRT_USER_ID 
+	     , CRT_PGM_ID 
+	     , CRT_IP_MAC 
+	     , UPD_DTHR 
+	     , UPD_USER_ID 
+	     , UPD_PGM_ID 
+	     , UPD_IP_MAC 
+		<![CDATA[
+		)
+	VALUES(
+		]]>
+	      #{ATTC_FILE_NO}
+	     , (SELECT IFNULL(MAX(SEQ),0)+1 FROM CMN_ATTC_FILE T WHERE ATTC_FILE_NO = #{ATTC_FILE_NO})
+	     , #{PGM_ID}
+	     , #{USER_ID}
+	     , #{FILE_NM}
+	     , #{SAVE_FILE_NM}
+	     , #{FILE_PATH}
+	     , #{FILE_EXT}
+	     , #{FILE_SIZE}
+	     , (SELECT CASE WHEN EXISTS (SELECT 1 FROM CMN_ATTC_FILE T WHERE ATTC_FILE_NO = #{ATTC_FILE_NO} AND FILE_STAT_RCD = 'CMN101.SAVE') 
+	     			THEN 'CMN101.SAVE'
+	     		ELSE #{FILE_STAT_RCD}
+	     	END FROM INFORMATION_SCHEMA.SYSTEM_USERS)
+	     , SYSDATE 
+	     , #{CRT_USER_ID} 
+	     , #{CRT_PGM_ID} 
+	     , #{CRT_IP_MAC} 
+	     , SYSDATE 
+	     , #{UPD_USER_ID} 
+	     , #{UPD_PGM_ID} 
+	     , #{UPD_IP_MAC} 
+	<![CDATA[)]]>
+	</insert>
+	 <!--
+		설명           :  첨부파일 목록 조회
+		파라미터     : 
+		주사용처	: 파일 업로드 팝업/파일 목록UDC
+		변경이력    : 
+	-->
+	<select id="selectCmnFileList" parameterType="HashMap" resultType="HashMap">
+    <![CDATA[
+		SELECT ATTC_FILE_NO
+			 , SEQ
+		     , PGM_ID
+		     , USER_ID
+		     , FILE_NM
+		     , SAVE_FILE_NM
+		     , FILE_PATH
+		     , FILE_EXT
+		     , FILE_SIZE
+		     , CASE WHEN FILE_STAT_RCD = 'CMN101.SAVE' THEN '저장완료' ELSE '임시저장' END AS FILE_STAT_NM
+		     , CRT_DTHR
+		     , CASE WHEN LOWER(FILE_EXT) IN ('doc', 'docx') THEN 'theme/images/icon/file_icon_DOC.png'
+	     			WHEN LOWER(FILE_EXT) IN ('xls', 'xlsx') THEN 'theme/images/icon/file_icon_XLS.png'
+		            WHEN LOWER(FILE_EXT) IN ('ppt', 'pptx') THEN 'theme/images/icon/file_icon_PPT.png'
+		            WHEN LOWER(FILE_EXT) IN ('pdf') THEN 'theme/images/icon/file_icon_PDF.png'
+		            WHEN LOWER(FILE_EXT) IN ('txt') THEN 'theme/images/icon/file_icon_TXT.png'
+		            WHEN LOWER(FILE_EXT) IN ('zip', 'egg') THEN 'theme/images/icon/file_icon_ZIP.png'
+		            WHEN LOWER(FILE_EXT) IN ('png', 'gif', 'jpg', 'jpeg', 'bmp', 'tif', 'tiff') THEN 'theme/images/icon/file_icon_IMG.png'
+		            ELSE 'theme/images/icon/file_icon_ETC.png'
+		     	END AS FILE_ICON_IMG
+		  FROM CMN_ATTC_FILE
+		WHERE ATTC_FILE_NO = #{ATTC_FILE_NO}
+	]]>
+	<if test="SEQ != null and SEQ!= ''" >
+		  AND SEQ = #{SEQ}
+	</if>
+	<if test="FILE_STAT_RCD != null and FILE_STAT_RCD!= ''" >
+		  AND FILE_STAT_RCD = #{FILE_STAT_RCD}
+	</if>
+		ORDER BY SEQ
+    </select>
+    
+<delete id="deleteCmnAttcFile" parameterType="HashMap">
+		<![CDATA[
+DELETE 
+  FROM CMN_ATTC_FILE
+ WHERE ATTC_FILE_NO = #{ATTC_FILE_NO__origin}
+  AND SEQ = #{SEQ__origin}
+        ]]>
+	</delete>
+	
+	
+		<select id="selectSysDate" resultType="String">
+	    <![CDATA[
+				SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') AS CURR_DT 
+
+			  FROM DUAL
+	 	]]>
+   </select>
+   
+     <select id="selectTimeStamp" resultType="String">
+      <![CDATA[
+				SELECT DATE_FORMAT(SYSDATE , 'YYYYMMDDHH24MISS') AS CURR_DT  
+			  FROM DUAL
+	 	]]>
+   </select>
+   
+   <select id="selectDaysBefore" resultType="String">
+	<choose>
+		<when test="strDay != null and strDay != ''">
+			SELECT SYSDATE -#{strDay} AS MON_BEF
+		</when>
+		<otherwise>
+			SELECT SYSDATE -30  AS MON_BEF
+		</otherwise>
+	</choose>
+			  FROM DUAL
+   </select>
+   
+   <!--
+		설명           :  공통코드 목록 조회
+		파라미터     : 
+		변경이력    : 
+	-->
+	<select id="selectCmnCodeList" parameterType="HashMap" resultType="HashMap">
+		/* QueryId : cmn-base01.selectCmnCodeList */
+        <![CDATA[
+        SELECT 
+               CD                       /*코드*/ 
+             , UCD                      /*상위코드*/ 
+             , CD_CLS                   /*코드분류*/ 
+             , CD_NM || CASE WHEN USE_YN = 'Y' THEN '' ELSE '【폐지】' END AS CD_NM /*코드명*/ 
+             , CD_SHORT_NM              /*코드약칭*/ 
+          FROM CMN_CODE 
+         WHERE CD_CLS = #{CD_CLS}
+        ]]>
+          <if test="CD != null and CD != ''" >
+          AND CD = #{CD} 
+          </if>
+          <if test="UCD != null and UCD != ''" >
+          AND UCD = #{UCD} 
+          </if>
+          <if test="EFFT_STAT_DT != null and EFFT_STAT_DT != ''" >
+          AND SYSDATE BETWEEN EFFT_STAT_DT AND EFFT_END_DT 
+          </if>             
+          <if test="USE_YN != null and USE_YN != ''" >
+          AND USE_YN = #{USE_YN} 
+          </if>     
+          <if test="CD_NM != null and CD_NM != ''" >
+          AND (   CD_NM LIKE  '%'||#{CD_NM}||'%' 
+               OR CD  LIKE '%'||#{CD_NM}||'%'
+               OR ENG_NM  LIKE '%'||#{CD_NM}||'%'                    
+              )
+          </if> 
+          <if test="UNIT_SYSTEM_RCD != null and UNIT_SYSTEM_RCD != ''" >
+          AND UNIT_SYSTEM_RCD = #{UNIT_SYSTEM_RCD} 
+          </if> 
+          <if test="CD != null and CD != ''" >
+          AND CD = #{CD} 
+          </if>         
+          <if test="CD_PRP1 != null and CD_PRP1!= ''" >
+          AND CD_PRP1 = #{CD_PRP1} 
+          </if> 
+          <if test="CD_PRP2 != null and CD_PRP2!= ''" >
+          AND CD_PRP2 = #{CD_PRP2} 
+          </if> 
+          <if test="CD_PRP3 != null and CD_PRP3!= ''" >
+          AND CD_PRP3 = #{CD_PRP3} 
+          </if> 
+          <if test="CD_PRP4 != null and CD_PRP4!= ''" >
+          AND CD_PRP4 = #{CD_PRP4} 
+          </if> 
+          <if test="CD_PRP5 != null and CD_PRP5!= ''" >
+          AND CD_PRP5 = #{CD_PRP5} 
+          </if> 
+          <if test="CD_PRP6 != null and CD_PRP6!= ''" >
+          AND CD_PRP6 = #{CD_PRP6} 
+          </if> 
+          <if test="CD_PRP7 != null and CD_PRP7!= ''" >
+          AND CD_PRP7 = #{CD_PRP7} 
+          </if> 
+          <if test="CD_PRP8 != null and CD_PRP8!= ''" >
+          AND CD_PRP8 = #{CD_PRP8} 
+          </if> 
+          <if test="CD_PRP9 != null and CD_PRP9!= ''" >
+          AND CD_PRP9 = #{CD_PRP9} 
+          </if> 
+          <if test="CD_PRP10 != null and CD_PRP10!= ''" >
+          AND CD_PRP10 = #{CD_PRP10} 
+          </if> 
+          <if test="CD_PRP11 != null and CD_PRP11!= ''" >
+          AND CD_PRP11 = #{CD_PRP11} 
+          </if> 
+          <if test="CD_PRP12 != null and CD_PRP12!= ''" >
+          AND CD_PRP12 = #{CD_PRP12} 
+          </if> 
+          <if test="CD_PRP13 != null and CD_PRP13!= ''" >
+          AND CD_PRP13 = #{CD_PRP13} 
+          </if> 
+          <if test="CD_PRP14 != null and CD_PRP14!= ''" >
+          AND CD_PRP14 = #{CD_PRP14} 
+          </if> 
+          <if test="CD_PRP15 != null and CD_PRP15!= ''" >
+          AND CD_PRP15 = #{CD_PRP15} 
+          </if> 
+          <if test="CD_PRP16 != null and CD_PRP16!= ''" >
+          AND CD_PRP16 = #{CD_PRP16} 
+          </if>           
+          <if test="CD_PRP17 != null and CD_PRP17!= ''" >
+          AND CD_PRP17 = #{CD_PRP17} 
+          </if>           
+          <if test="CD_PRP18 != null and CD_PRP18!= ''" >
+          AND CD_PRP18 = #{CD_PRP18} 
+          </if>           
+          <if test="CD_PRP19 != null and CD_PRP19!= ''" >
+          AND CD_PRP19 = #{CD_PRP19} 
+          </if>           
+          <if test="CD_PRP20 != null and CD_PRP20!= ''" >
+          AND CD_PRP20 = #{CD_PRP20} 
+          </if>                     
+          <if test="ORDER_BY != null and ORDER_BY != ''" >
+          ORDER BY  ${ORDER_BY}
+          </if>
+    </select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tomatosystem.app.sample.mapper.LdqMapper">
+
+
+	<select id="selectLdgList" parameterType="hashmap"
+	    resultType="java.util.LinkedHashMap" timeout="10">
+	
+	    SELECT PRJCT_CD, UP_CNSTKND_CD, UP_CNSTKND_NM, CNSTKND_ID, CNSTKND_NM,
+	           CBGT_DTLS_ID, DTLSNM, DTLS_SIZ, DTLS_UNIT_NM, CBGT_QTY, CBGT_UNTPRC,
+	           CBGT_AMT, CBGT_MAT_UNTPRC, CBGT_MAT_AMT, CBGT_LAB_UNTPRC, CBGT_LAB_AMT,
+	           CBGT_OSORDR_MAT_UNTPRC, CBGT_OSORDR_MAT_AMT, CBGT_OSORDR_LAB_UNTPRC,
+	           CBGT_OSORDR_LAB_AMT, CBGT_OSORDR_EXPN_UNTPRC, CBGT_OSORDR_EXPN_AMT,
+	           CBGT_OSORDR_UNTPRC, CBGT_OSORDR_AMT, CBGT_EXPN_UNTPRC, CBGT_EXPN_AMT,
+	           ENFCM_EXPNDITM_CD, ENFCM_IMPSBL_YN, CNTRL_YN, MAT_CD, LN_CNST_YN,
+	           WBS_CD, STND_CD, PRGSS_TRGT_PRMCT_YN, QTY_CNTRL_YN, DIRECT_CNSTCT_YN,
+	           RMK, GB_CD, SORT_SERL, RLACT_DTLS_ID, ACCTCD, EXPND_ITM_CD, GAREA_YN,
+	           FCLTY_NM
+	    FROM tmt.prjct_exec_dtls
+	    WHERE PRJCT_CD = 'CJA14004'
+	    ORDER BY CBGT_DTLS_ID ASC
+	    <if test="ROWCOUNT != null and ROWCOUNT != ''">
+	        LIMIT ${ROWCOUNT}
+	    </if>
+		
+	</select>
+
+	<insert id="insertLdg" parameterType="hashmap">
+		INSERT INTO tmt.prjct_exec_dtls (
+		PRJCT_CD,
+		UP_CNSTKND_CD,
+		UP_CNSTKND_NM,
+		CNSTKND_ID,
+		CNSTKND_NM,
+		CBGT_DTLS_ID,
+		DTLSNM,
+		DTLS_SIZ,
+		DTLS_UNIT_NM,
+		CBGT_QTY,
+		CBGT_UNTPRC,
+		CBGT_AMT,
+		CBGT_MAT_UNTPRC,
+		CBGT_MAT_AMT,
+		CBGT_LAB_UNTPRC,
+		CBGT_LAB_AMT,
+		CBGT_OSORDR_MAT_UNTPRC,
+		CBGT_OSORDR_MAT_AMT,
+		CBGT_OSORDR_LAB_UNTPRC,
+		CBGT_OSORDR_LAB_AMT,
+		CBGT_OSORDR_EXPN_UNTPRC,
+		CBGT_OSORDR_EXPN_AMT,
+		CBGT_OSORDR_UNTPRC,
+		CBGT_OSORDR_AMT,
+		CBGT_EXPN_UNTPRC,
+		CBGT_EXPN_AMT,
+		ENFCM_EXPNDITM_CD,
+		ENFCM_IMPSBL_YN,
+		CNTRL_YN,
+		MAT_CD,
+		LN_CNST_YN,
+		WBS_CD,
+		STND_CD,
+		PRGSS_TRGT_PRMCT_YN,
+		QTY_CNTRL_YN,
+		DIRECT_CNSTCT_YN,
+		RMK,
+		GB_CD,
+		SORT_SERL,
+		RLACT_DTLS_ID,
+		ACCTCD,
+		EXPND_ITM_CD,
+		GAREA_YN,
+		FCLTY_NM
+		) VALUES (
+		#{PRJCT_CD},
+		#{UP_CNSTKND_CD},
+		#{UP_CNSTKND_NM},
+		#{CNSTKND_ID},
+		#{CNSTKND_NM},
+		#{CBGT_DTLS_ID},
+		#{DTLSNM},
+		#{DTLS_SIZ},
+		#{DTLS_UNIT_NM},
+		#{CBGT_QTY},
+		#{CBGT_UNTPRC},
+		#{CBGT_AMT},
+		#{CBGT_MAT_UNTPRC},
+		#{CBGT_MAT_AMT},
+		#{CBGT_LAB_UNTPRC},
+		#{CBGT_LAB_AMT},
+		#{CBGT_OSORDR_MAT_UNTPRC},
+		#{CBGT_OSORDR_MAT_AMT},
+		#{CBGT_OSORDR_LAB_UNTPRC},
+		#{CBGT_OSORDR_LAB_AMT},
+		#{CBGT_OSORDR_EXPN_UNTPRC},
+		#{CBGT_OSORDR_EXPN_AMT},
+		#{CBGT_OSORDR_UNTPRC},
+		#{CBGT_OSORDR_AMT},
+		#{CBGT_EXPN_UNTPRC},
+		#{CBGT_EXPN_AMT},
+		#{ENFCM_EXPNDITM_CD},
+		#{ENFCM_IMPSBL_YN},
+		#{CNTRL_YN},
+		#{MAT_CD},
+		#{LN_CNST_YN},
+		#{WBS_CD},
+		#{STND_CD},
+		#{PRGSS_TRGT_PRMCT_YN},
+		#{QTY_CNTRL_YN},
+		#{DIRECT_CNSTCT_YN},
+		#{RMK},
+		#{GB_CD},
+		#{SORT_SERL},
+		#{RLACT_DTLS_ID},
+		#{ACCTCD},
+		#{EXPND_ITM_CD},
+		#{GAREA_YN},
+		#{FCLTY_NM}
+		)
+	</insert>
+	<select id="selectLdgListCount" parameterType="hashmap" resultType="int">
+	    <choose>
+	        <when test="ROWCOUNT != null and ROWCOUNT != ''">
+	            SELECT COUNT(*)
+	            FROM (
+	                SELECT 1
+	                FROM tmt.prjct_exec_dtls
+	                LIMIT ${ROWCOUNT}
+	            ) A
+	        </when>
+	        <otherwise>
+	            SELECT COUNT(*)
+	            FROM tmt.prjct_exec_dtls
+	        </otherwise>
+	    </choose>
+	</select>
+</mapper>

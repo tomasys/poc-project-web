@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd" >
+<properties>
+	<entry key="local.jdbc.driverClassName">oracle.jdbc.OracleDriver</entry>
+	<entry key="local.jdbc.url">jdbc:oracle:thin:@xxx:1521/edu</entry>
+	<entry key="local.jdbc.username">xx</entry>
+	<entry key="local.jdbc.password">xx</entry>
+	<entry key="dev.jdbc.jndiName">jdbc/...</entry>
+	<entry key="prd.jdbc.jndiName">jdbc/...</entry>
+</properties>
+

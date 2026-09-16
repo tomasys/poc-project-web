@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:p="http://www.springframework.org/schema/p"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+	    xmlns:aop="http://www.springframework.org/schema/aop"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	
+    <context:component-scan base-package="com.tomatosystem">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+	<!-- ExceptionResolver -->
+	<bean id="exceptionResolver" class="com.tomatosystem.core.resolver.DefaultExceptionResolver" />
+        
+    <!-- exbuilder6 request mapping adapter -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="customArgumentResolvers">
+            <list>
+                <!-- Controller의 DataRequest Parameter를 처리하기 위한 Resolver -->
+                 <bean class="com.cleopatra.spring.DataRequestResolver" />
+            </list>
+        </property>
+         <!-- @ResponseBody application/json 으로 변경 -->
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.GsonHttpMessageConverter"/>
+            </list>
+        </property> 
+    </bean>
+    
+     <!-- json view -->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" id="viewResolver" p:order="0"/>
+	<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" id="jsonView">
+	    <property name="contentType" value="application/json;charset=UTF-8"/>
+	</bean>
+
+  <!-- view resolver
+     InternalResourceViewResolver/UrlBasedViewResolver	
+     특정 디렉토리 경로의 JSP파일들을 호출할 때 편리하게 사용할수 있다.
+     기본적으로 사용하는 View 클래스는 InternalResourceView이며, View 이름이 곧 JSP 파일이름이 된다.
+    <bean id="jstlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/view/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+    	 -->	
+    <!-- multipart resolver -->
+	<!-- 최대 업로드 사이즈 50M 지정
+	<bean id="spring.RegularCommonsMultipartResolver"
+			class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+	    	p:maxUploadSize="52428800"
+	    	p:maxInMemorySize="10485760"/>
+    <alias name="local.MultiCommonsMultipartResolver" alias="multipartResolver" />
+    또는
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+     -->
+     
+     	<!-- 트랜잭션 aop Controller에 주입될경우 dispatcher-servlet에 정의함. 
+		  aop는 jdk 다이나믹 프록시 or cglib 프록시를 사용함. 
+	      jdk 다이나믹 프록시는 반드시 인터페이스가 있어야만 생성가능함, 인터페이스가 없을 경우 cglib 프록시가 class에 대한 프록시를 생성함.
+	      cglib 프록시는(인터페이스를 만들지 않을 경우) final이나 private과 같이 상속에 대해 Override를 지원하지 않는 경우 Proxy에서 
+	      해당 메소드에 대한 Aspect를 적용할 수 없다는 단점이 있으나  실제 바이트 코드를 조작하여 프록시를 생성하므로 jdk 다이나믹 프록시보다 성능면에서 우수함.
+	      (jdk 다이나믹 프록시는 InvocationHandler의 invoke라는 함수를 Override하여 Proxy의 위임 기능을 수행한다. 
+	      이 과정에서 Object에 대해 Reflection기능을 사용하여 기능을 구현하기 때문에 퍼포먼스의 하락의 원인이 되기도 함)
+	      by. Park ju wan
+	<aop:config>
+		<aop:pointcut id="txPointcut"
+		expression="execution(* com.tomatosystem..controller.*Controller.*(..))"/>
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
+	</aop:config>
+	-->
+	<!-- 
+	url-pattern 을 "/" 와 선언할 경우 정적(html,js,이미지등) 요소들의 접근을 할 수 없음.
+따라서 DispatcherSerlvet이 처리하지 못한 요청을 DefaultSerlvet에게 넘겨주는 역할을 하는 핸들러
+ <mvc:default-servlet-handler/>를 DispatcherSerlvet 설정에 등록해야함
+	  <mvc:annotation-driven />
+	<mvc:default-servlet-handler />
+	 -->
+</beans>

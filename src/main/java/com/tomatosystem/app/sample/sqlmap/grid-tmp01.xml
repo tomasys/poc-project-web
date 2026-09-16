@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="grid-tmp01">
+
+<select id="selectCmnTmpRegList" parameterType="HashMap"
+		resultType="HashMap">
+		<![CDATA[
+			SELECT STUD_NO			/*학번*/ 
+			     , PARTY_ID 			/*구성원 ID*/ 
+			     , REP_NM 			/*대표명*/ 
+			     , ENG_NM 			/*영어명*/ 
+			     , CHA_NM 			/*한자명*/ 
+			     , GENDER_RCD 			/*성별코드([TMP001])*/ 
+			     , SSN 			/*주민번호*/ 
+			     , STUD_DIV_RCD 			/*학생구분코드([TMP002])*/ 
+			     , DEPT_CD 			/*학사부서코드*/ 
+			     , DAY_NIGHT_DIV_RCD 			/*주야간코드([TMP003])*/ 
+			     , NAT_RCD 			/*국가코드([TMP004])*/ 
+			     , ZIPCODE 			/*우편번호*/ 
+			     , ADDR1 			/*주소1*/ 
+			     , ADDR2 			/*주소2*/ 
+			     , CLP_NO 			/*휴대전화번호*/ 
+			     , AEN 			/*내선번호*/ 
+			     , EMAIL 			/*이메일*/ 
+			     , BANK_RCD 			/*은행코드([TMP005])*/ 
+			     , ACCT_NO 			/*계좌번*/ 
+			     , OWNER_NM 			/*소유명*/ 
+			     , ATTC_FILE_NO 			/*파일순번*/ 
+			     , STUD_NO AS KEY_VALUE 			/* 고유번호*/
+			     , (SELECT COUNT(1) 
+			          FROM CMN_TMP_REG_FEE FEE 
+			         WHERE REG.STUD_NO = FEE.STUD_NO ) AS DTL_CNT 
+			  FROM CMN_TMP_REG REG
+			  ]]>
+	 <where>
+	 	<if test="STUD_NO != null and STUD_NO != ''">
+			AND ( REP_NM LIKE '%'||#{STUD_NO}||'%'
+			OR STUD_NO LIKE '%'||#{STUD_NO}||'%' )
+		</if>
+	 </where>
+	
+	</select>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-12 -->
+	<insert id="insertCmnTmpReg" parameterType="HashMap">
+		/* QueryId : insertCmnTmpReg */
+		INSERT INTO CMN_TMP_REG(
+		STUD_NO
+		, PARTY_ID
+		, REP_NM
+		<if test="ENG_NM != null and ENG_NM != ''">
+			, ENG_NM
+		</if>
+		<if test="CHA_NM != null and CHA_NM != ''">
+			, CHA_NM
+		</if>
+		<if test="GENDER_RCD != null and GENDER_RCD != ''">
+			, GENDER_RCD
+		</if>
+		<if test="SSN != null and SSN != ''">
+			, SSN
+		</if>
+		<if test="STUD_DIV_RCD != null and STUD_DIV_RCD != ''">
+			, STUD_DIV_RCD
+		</if>
+		<if test="DEPT_CD != null and DEPT_CD != ''">
+			, DEPT_CD
+		</if>
+		<if test="DAY_NIGHT_DIV_RCD != null and DAY_NIGHT_DIV_RCD != ''">
+			, DAY_NIGHT_DIV_RCD
+		</if>
+		<if test="NAT_RCD != null and NAT_RCD != ''">
+			, NAT_RCD
+		</if>
+		<if test="ZIPCODE != null and ZIPCODE != ''">
+			, ZIPCODE
+		</if>
+		<if test="ADDR1 != null and ADDR1 != ''">
+			, ADDR1
+		</if>
+		<if test="ADDR2 != null and ADDR2 != ''">
+			, ADDR2
+		</if>
+		<if test="CLP_NO != null and CLP_NO != ''">
+			, CLP_NO
+		</if>
+		<if test="AEN != null and AEN != ''">
+			, AEN
+		</if>
+		<if test="EMAIL != null and EMAIL != ''">
+			, EMAIL
+		</if>
+		<if test="BANK_RCD != null and BANK_RCD != ''">
+			, BANK_RCD
+		</if>
+		<if test="ACCT_NO != null and ACCT_NO != ''">
+			, ACCT_NO
+		</if>
+		<if test="OWNER_NM != null and OWNER_NM != ''">
+			, OWNER_NM
+		</if>
+		<if test="ATTC_FILE_NO != null and ATTC_FILE_NO != ''">
+			, ATTC_FILE_NO
+		</if>
+		, CRT_DTHR
+		, CRT_USER_ID
+		, CRT_PGM_ID
+		, CRT_IP_MAC
+		, UPD_DTHR
+		, UPD_USER_ID
+		, UPD_PGM_ID
+		, UPD_IP_MAC
+		)VALUES(
+		#{STUD_NO}
+		, #{PARTY_ID}
+		, #{REP_NM}
+		<if test="ENG_NM != null and ENG_NM != ''">
+			, #{ENG_NM}
+		</if>
+		<if test="CHA_NM != null and CHA_NM != ''">
+			, #{CHA_NM}
+		</if>
+		<if test="GENDER_RCD != null and GENDER_RCD != ''">
+			, #{GENDER_RCD}
+		</if>
+		<if test="SSN != null and SSN != ''">
+			, #{SSN}
+		</if>
+		<if test="STUD_DIV_RCD != null and STUD_DIV_RCD != ''">
+			, #{STUD_DIV_RCD}
+		</if>
+		<if test="DEPT_CD != null and DEPT_CD != ''">
+			, #{DEPT_CD}
+		</if>
+		<if test="DAY_NIGHT_DIV_RCD != null and DAY_NIGHT_DIV_RCD != ''">
+			, #{DAY_NIGHT_DIV_RCD}
+		</if>
+		<if test="NAT_RCD != null and NAT_RCD != ''">
+			, #{NAT_RCD}
+		</if>
+		<if test="ZIPCODE != null and ZIPCODE != ''">
+			, #{ZIPCODE}
+		</if>
+		<if test="ADDR1 != null and ADDR1 != ''">
+			, #{ADDR1}
+		</if>
+		<if test="ADDR2 != null and ADDR2 != ''">
+			, #{ADDR2}
+		</if>
+		<if test="CLP_NO != null and CLP_NO != ''">
+			, #{CLP_NO}
+		</if>
+		<if test="AEN != null and AEN != ''">
+			, #{AEN}
+		</if>
+		<if test="EMAIL != null and EMAIL != ''">
+			, #{EMAIL}
+		</if>
+		<if test="BANK_RCD != null and BANK_RCD != ''">
+			, #{BANK_RCD}
+		</if>
+		<if test="ACCT_NO != null and ACCT_NO != ''">
+			, #{ACCT_NO}
+		</if>
+		<if test="OWNER_NM != null and OWNER_NM != ''">
+			, #{OWNER_NM}
+		</if>
+		<if test="ATTC_FILE_NO != null and ATTC_FILE_NO != ''">
+			, #{ATTC_FILE_NO}
+		</if>
+		, SYSDATE
+		, #{CRT_USER_ID}
+		, #{CRT_PGM_ID}
+		, #{CRT_IP_MAC}
+		, SYSDATE
+		, #{UPD_USER_ID}
+		, #{UPD_PGM_ID}
+		, #{UPD_IP_MAC}
+		)
+	</insert>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-12 -->
+	<update id="updateCmnTmpReg" parameterType="HashMap">
+		/* QueryId : updateCmnTmpReg */
+		UPDATE CMN_TMP_REG SET
+		UPD_DTHR = SYSDATE
+		, UPD_USER_ID = #{UPD_USER_ID}
+		, UPD_PGM_ID = #{UPD_PGM_ID}
+		, UPD_IP_MAC = #{UPD_IP_MAC}
+		<if test="PARTY_ID != null">
+			, PARTY_ID = #{PARTY_ID}
+		</if>
+		<if test="REP_NM != null">
+			, REP_NM = #{REP_NM}
+		</if>
+		<if test="ENG_NM != null">
+			, ENG_NM = #{ENG_NM}
+		</if>
+		<if test="CHA_NM != null">
+			, CHA_NM = #{CHA_NM}
+		</if>
+		<if test="GENDER_RCD != null">
+			, GENDER_RCD = #{GENDER_RCD}
+		</if>
+		<if test="SSN != null">
+			, SSN = #{SSN}
+		</if>
+		<if test="STUD_DIV_RCD != null">
+			, STUD_DIV_RCD = #{STUD_DIV_RCD}
+		</if>
+		<if test="DEPT_CD != null">
+			, DEPT_CD = #{DEPT_CD}
+		</if>
+		<if test="DAY_NIGHT_DIV_RCD != null">
+			, DAY_NIGHT_DIV_RCD = #{DAY_NIGHT_DIV_RCD}
+		</if>
+		<if test="NAT_RCD != null">
+			, NAT_RCD = #{NAT_RCD}
+		</if>
+		<if test="ZIPCODE != null">
+			, ZIPCODE = #{ZIPCODE}
+		</if>
+		<if test="ADDR1 != null">
+			, ADDR1 = #{ADDR1}
+		</if>
+		<if test="ADDR2 != null">
+			, ADDR2 = #{ADDR2}
+		</if>
+		<if test="CLP_NO != null">
+			, CLP_NO = #{CLP_NO}
+		</if>
+		<if test="AEN != null">
+			, AEN = #{AEN}
+		</if>
+		<if test="EMAIL != null">
+			, EMAIL = #{EMAIL}
+		</if>
+		<if test="BANK_RCD != null">
+			, BANK_RCD = #{BANK_RCD}
+		</if>
+		<if test="ACCT_NO != null">
+			, ACCT_NO = #{ACCT_NO}
+		</if>
+		<if test="OWNER_NM != null">
+			, OWNER_NM = #{OWNER_NM}
+		</if>
+		<if test="ATTC_FILE_NO != null">
+			, ATTC_FILE_NO = #{ATTC_FILE_NO}
+		</if>
+		WHERE STUD_NO = #{STUD_NO__origin}
+	</update>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-12 -->
+	<delete id="deleteCmnTmpReg" parameterType="HashMap">
+		/* QueryId : deleteCmnTmpReg */
+		DELETE
+		FROM CMN_TMP_REG
+		WHERE STUD_NO = #{STUD_NO__origin}
+	</delete>
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-16 * 내용 : CMN_TMP_REG_FEE ( SELECT ) -->
+	<select id="selectCmnTmpRegFeeList" parameterType="HashMap"
+		resultType="HashMap">
+		<![CDATA[
+SELECT SCH_YEAR			/*학년도*/ 
+     , SMT_RCD 			/*학기코드[TMP006]*/ 
+     , STUD_NO 			/*학번*/ 
+     , REG_CLS_RCD 			/*등록분류코드[TMP007]*/ 
+     , TO_CHAR(IFR_DT, 'YYYYMMDD') AS IFR_DT 			/*고지일자*/ 
+     , TO_CHAR(PAY_CLOSE_DT, 'YYYYMMDD') AS PAY_CLOSE_DT			/*납입마감일자*/ 
+     , TO_CHAR(DIV_PAY_REQ_DT, 'YYYYMMDD') AS DIV_PAY_REQ_DT 			/*분납요청일자*/ 
+     , DIV_PAY_DESC 			/*분납내역*/ 
+     , DIV_PAY_TYPE_CD 			/*분납유형코드*/ 
+     , DIV_PAY_STAT_RCD 			/*분납상태코드[TMP008]*/ 
+     , DIV_PAY_NO 			/*분납번호*/ 
+     , BKG_PNT 			/*수강신청학점*/ 
+     , BKG_TIME 			/*수강신청시간*/ 
+     , REG_STUD_DIV_RCD 			/*등록생구분코드[TMP009]*/ 
+     , REMARK 			/*비고*/ 
+     , REF_KEY 			/*참조키*/ 
+     , SCH_YEAR || SMT_RCD || STUD_NO || REG_CLS_RCD AS KEY_VALUE 			/* 고유번호*/ 
+  FROM CMN_TMP_REG_FEE 
+ WHERE STUD_NO = #{STUD_NO}
+ ]]>
+	</select>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-16 -->
+	<insert id="insertCmnTmpRegFee" parameterType="HashMap">
+		/* QueryId : insertCmnTmpRegFee */
+		INSERT INTO CMN_TMP_REG_FEE(
+		SCH_YEAR
+		, SMT_RCD
+		, STUD_NO
+		, REG_CLS_RCD
+		, IFR_DT
+		, PAY_CLOSE_DT
+		<if test="DIV_PAY_REQ_DT != null and DIV_PAY_REQ_DT != ''">
+			, DIV_PAY_REQ_DT
+		</if>
+		<if test="DIV_PAY_DESC != null and DIV_PAY_DESC != ''">
+			, DIV_PAY_DESC
+		</if>
+		<if test="DIV_PAY_TYPE_CD != null and DIV_PAY_TYPE_CD != ''">
+			, DIV_PAY_TYPE_CD
+		</if>
+		<if test="DIV_PAY_STAT_RCD != null and DIV_PAY_STAT_RCD != ''">
+			, DIV_PAY_STAT_RCD
+		</if>
+		<if test="DIV_PAY_NO != null and DIV_PAY_NO != ''">
+			, DIV_PAY_NO
+		</if>
+		<if test="BKG_PNT != null and BKG_PNT != ''">
+			, BKG_PNT
+		</if>
+		<if test="BKG_TIME != null and BKG_TIME != ''">
+			, BKG_TIME
+		</if>
+		<if test="REG_STUD_DIV_RCD != null and REG_STUD_DIV_RCD != ''">
+			, REG_STUD_DIV_RCD
+		</if>
+		<if test="REMARK != null and REMARK != ''">
+			, REMARK
+		</if>
+		<if test="REF_KEY != null and REF_KEY != ''">
+			, REF_KEY
+		</if>
+		, CRT_DTHR
+		, CRT_USER_ID
+		, CRT_PGM_ID
+		, CRT_IP_MAC
+		, UPD_DTHR
+		, UPD_USER_ID
+		, UPD_PGM_ID
+		, UPD_IP_MAC
+		)VALUES(
+		#{SCH_YEAR}
+		, #{SMT_RCD}
+		, #{STUD_NO}
+		, #{REG_CLS_RCD}
+		, TO_DATE(#{IFR_DT},'YYYYMMDD')
+		, TO_DATE(#{PAY_CLOSE_DT},'YYYYMMDD')
+		<if test="DIV_PAY_REQ_DT != null and DIV_PAY_REQ_DT != ''">
+			, TO_DATE(#{DIV_PAY_REQ_DT},'YYYYMMDD')
+		</if>
+		<if test="DIV_PAY_DESC != null and DIV_PAY_DESC != ''">
+			, #{DIV_PAY_DESC}
+		</if>
+		<if test="DIV_PAY_TYPE_CD != null and DIV_PAY_TYPE_CD != ''">
+			, #{DIV_PAY_TYPE_CD}
+		</if>
+		<if test="DIV_PAY_STAT_RCD != null and DIV_PAY_STAT_RCD != ''">
+			, #{DIV_PAY_STAT_RCD}
+		</if>
+		<if test="DIV_PAY_NO != null and DIV_PAY_NO != ''">
+			, #{DIV_PAY_NO}
+		</if>
+		<if test="BKG_PNT != null and BKG_PNT != ''">
+			, #{BKG_PNT}
+		</if>
+		<if test="BKG_TIME != null and BKG_TIME != ''">
+			, #{BKG_TIME}
+		</if>
+		<if test="REG_STUD_DIV_RCD != null and REG_STUD_DIV_RCD != ''">
+			, #{REG_STUD_DIV_RCD}
+		</if>
+		<if test="REMARK != null and REMARK != ''">
+			, #{REMARK}
+		</if>
+		<if test="REF_KEY != null and REF_KEY != ''">
+			, #{REF_KEY}
+		</if>
+		, SYSDATE
+		, #{CRT_USER_ID}
+		, #{CRT_PGM_ID}
+		, #{CRT_IP_MAC}
+		, SYSDATE
+		, #{UPD_USER_ID}
+		, #{UPD_PGM_ID}
+		, #{UPD_IP_MAC}
+		)
+	</insert>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-16 -->
+	<update id="updateCmnTmpRegFee" parameterType="HashMap">
+		/* QueryId : updateCmnTmpRegFee */
+		UPDATE CMN_TMP_REG_FEE SET
+		UPD_DTHR = SYSDATE
+		, UPD_USER_ID = #{UPD_USER_ID}
+		, UPD_PGM_ID = #{UPD_PGM_ID}
+		, UPD_IP_MAC = #{UPD_IP_MAC}
+		<if test="IFR_DT != null and IFR_DT != ''">
+			, IFR_DT = TO_DATE(#{IFR_DT},'YYYYMMDD')
+		</if>
+		<if test="PAY_CLOSE_DT != null and PAY_CLOSE_DT != ''">
+			, PAY_CLOSE_DT = TO_DATE(#{PAY_CLOSE_DT},'YYYYMMDD')
+		</if>
+		<choose>
+			<when test="DIV_PAY_REQ_DT == ''">
+				, DIV_PAY_REQ_DT = TO_DATE(null,'YYYYMMDD')
+			</when>
+			<otherwise>
+				, DIV_PAY_REQ_DT = TO_DATE(#{DIV_PAY_REQ_DT},'YYYYMMDD')
+			</otherwise>
+		</choose>
+		<if test="DIV_PAY_DESC != null and DIV_PAY_DESC != ''">
+			, DIV_PAY_DESC = #{DIV_PAY_DESC}
+		</if>
+		<if test="DIV_PAY_TYPE_CD != null and DIV_PAY_TYPE_CD != ''">
+			, DIV_PAY_TYPE_CD = #{DIV_PAY_TYPE_CD}
+		</if>
+		<if test="DIV_PAY_STAT_RCD != null and DIV_PAY_STAT_RCD != ''">
+			, DIV_PAY_STAT_RCD = #{DIV_PAY_STAT_RCD}
+		</if>
+		<if test="DIV_PAY_NO != null and DIV_PAY_NO != ''">
+			, DIV_PAY_NO = #{DIV_PAY_NO}
+		</if>
+		<if test="BKG_PNT != null and BKG_PNT != ''">
+			, BKG_PNT = #{BKG_PNT}
+		</if>
+		<if test="BKG_TIME != null and BKG_TIME != ''">
+			, BKG_TIME = #{BKG_TIME}
+		</if>
+		<if test="REG_STUD_DIV_RCD != null and REG_STUD_DIV_RCD != ''">
+			, REG_STUD_DIV_RCD = #{REG_STUD_DIV_RCD}
+		</if>
+		<if test="REMARK != null and REMARK != ''">
+			, REMARK = #{REMARK}
+		</if>
+		<if test="REF_KEY != null and REF_KEY != ''">
+			, REF_KEY = #{REF_KEY}
+		</if>
+		WHERE SCH_YEAR = #{SCH_YEAR__origin}
+		AND SMT_RCD = #{SMT_RCD__origin}
+		AND STUD_NO = #{STUD_NO__origin}
+		AND REG_CLS_RCD = #{REG_CLS_RCD__origin}
+	</update>
+
+
+	<!-- * 자동 생성 쿼리 * 생성일시 : 2020-03-16 -->
+	<delete id="deleteCmnTmpRegFee" parameterType="HashMap">
+		/* QueryId : deleteCmnTmpRegFee */
+		DELETE
+		FROM CMN_TMP_REG_FEE
+		WHERE SCH_YEAR = #{SCH_YEAR__origin}
+		AND SMT_RCD = #{SMT_RCD__origin}
+		AND STUD_NO = #{STUD_NO__origin}
+		AND REG_CLS_RCD = #{REG_CLS_RCD__origin}
+	</delete>
+	
+	<select id="getDataList" parameterType="HashMap"
+		resultType="HashMap">
+
+		SELECT *
+		FROM CO_SYS_DOWNLOAD_LOG_POC
+		WHERE 1=1
+		<if test="docType != null and docType != ''">
+			AND DOC_TYPE = #{docType}
+		</if>
+		<if test="docNum != null and docNum != ''">
+			AND INSTR(DOC_NO, UPPER(#{docNum})) > 0
+		</if>
+		<if test="downloader != null and downloader != ''">
+			AND INSTR(DOWN_LOADER_NAME , UPPER(#{downloader})) > 0
+		</if>
+		<if test="fromDate != null and fromDate != ''">
+			AND TO_CHAR(DOWN_LOAD_DATE, 'YYYYMMDD') <![CDATA[>=]]>	#{fromDate}
+		</if>
+		<if test="toDate != null and toDate != ''">
+			AND TO_CHAR(DOWN_LOAD_DATE, 'YYYYMMDD') <![CDATA[<=]]>	#{toDate}
+		</if>
+		<if test="count != null and count != ''">
+			AND ROWNUM <![CDATA[<=]]>	#{count}
+		</if>
+
+	</select>	
+</mapper>
