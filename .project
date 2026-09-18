@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>woori-bank-poc-web</name>
+	<name>woori-bank-git-poc-web</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -42,9 +42,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>.exbuilder-fragments/woori-bank-poc</name>
+			<name>.exbuilder-fragments/woori-bank-git-poc</name>
 			<type>2</type>
-			<locationURI>EBFRAG_BUILD_OF_woori-bank-poc</locationURI>
+			<locationURI>EBFRAG_BUILD_OF_woori-bank-git-poc</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
